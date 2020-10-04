@@ -1,4 +1,6 @@
-package hometask2;
+import hometask2.ArrayInvalidColumnCountException;
+import hometask2.ArrayInvalidRowCountException;
+import hometask2.ArrayParseToIntegerException;
 
 import java.util.Arrays;
 
@@ -21,14 +23,8 @@ public class Main {
             }
             System.out.println("Result of operation is: " + calcMatrix(toIntMatrix(toArray(s)))); //<-- и сюда
         }
-        catch(ArrayInvalidColumnCountException e){
+        catch(ArrayInvalidRowCountException | ArrayInvalidColumnCountException | ArrayParseToIntegerException e){
             System.out.println(e.getMessage());
-        }
-        catch(ArrayInvalidRowCountException m){
-            System.out.println(m.getMessage());
-        }
-        catch(ArrayParseToIntegerException i){
-            System.out.println(i.getMessage());
         }
         catch(Throwable t){
             System.out.println("Какая то непредвиденная ошибка");
