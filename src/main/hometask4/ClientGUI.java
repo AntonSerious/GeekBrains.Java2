@@ -36,22 +36,12 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
     protected static FileWriter systemLog;
     protected static Date date = new Date();
 
-    static {
-        try {
-            systemLog = new FileWriter("systemLogs.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public static void main(String[] args) throws IOException{
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
                     new ClientGUI();
-                    systemLog.write(date.toString() + " Client GUI has started to work...");
-                    //systemLog.flush();
+                    wrtMsgToLogFile(" Client GUI has started to work..." + "\n");
                 } catch (IOException e) {
                     try {
                         systemLog.write(e.toString());
@@ -62,8 +52,18 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
                 }
             }
         });
-    }
 
+    }
+    private static void wrtMsgToLogFile(String msg){
+        try{
+            FileWriter out = new FileWriter("systemLogs.txt",true);
+            out.write(msg);
+            out.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private ClientGUI() throws IOException {
         Thread.setDefaultUncaughtExceptionHandler(this);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -84,11 +84,8 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
             public void keyTyped(KeyEvent e) {
                 if(e.getKeyChar()== '\n'){
                     btnSend.doClick();
-                    try {
-                        systemLog.write(date.toString() +" key 'Enter' is pressed" + "\n");
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
+                    wrtMsgToLogFile(date.toString() +" key 'Enter' is pressed" + "\n");
+
                 }
                 //System.out.println(e.getKeyChar()); //почему e.getKeyCode всегда возвращает 0?
             }
@@ -125,14 +122,13 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         }
         else if(src == btnSend){
             System.out.println("btnSend");
+            if("".equals(this.tfMessage.getText())) return;
+
             this.log.setText(this.log.getText() + this.tfLogin.getText() + " :" + this.tfMessage.getText() + "\n");
+            wrtMsgToLogFile(this.tfLogin.getText() + " has sent the message: " + this.tfMessage.getText() + "\n");
             this.tfMessage.setText("");
-            try {
-                systemLog.write(this.tfMessage.getText() + "\n");
-                systemLog.flush();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+
+
         }
         else{
             throw new RuntimeException("Unknown source: " + src);
@@ -157,4 +153,5 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         }
 
     }
+
 }
