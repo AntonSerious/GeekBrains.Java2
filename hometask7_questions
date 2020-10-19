@@ -1,0 +1,2 @@
+1.SocketThread.SendMessage(msg); //make it work with Library!   Вот здесь не совсем понял, чего мы пытались добиться с помощью Library, и что все таки нужно попытаться сделать с помощью Library?
+2. Непонятно - для чего нужен метод Library.getTypeBroadcast. 
